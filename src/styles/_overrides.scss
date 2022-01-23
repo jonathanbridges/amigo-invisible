@@ -1,0 +1,12 @@
+@import '~bootstrap/scss/functions';
+
+// Variable overrides
+$primary: #c30f16;
+$secondary: #1e792c;
+
+$font-family-sans-serif: 'Montserrat', sans-serif;
+$navbar-brand-font-size: 1.5rem;
+$navbar-light-brand-color: white;
+$navbar-light-brand-hover-color: white;
+
+@import '~bootstrap/scss/bootstrap';

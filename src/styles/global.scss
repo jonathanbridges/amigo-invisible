@@ -1,0 +1,35 @@
+@import './index.scss';
+@import './overrides';
+
+body {
+	background: $primary;
+}
+
+.San-navbar-brand {
+	display: flex;
+	align-items: center;
+  user-select: none;
+	> img {
+    filter: invert(100%);
+	}
+}
+
+.Fade-enter {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.Fade-enter-active {
+	opacity: 1;
+	transition: opacity 500ms ease-in;
+}
+
+.Fade-exit {
+	opacity: 1;
+	pointer-events: none;
+}
+
+.Fade-exit-active {
+	opacity: 0;
+	transition: opacity 500ms ease-in;
+}
