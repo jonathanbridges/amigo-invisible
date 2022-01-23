@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/amigo-invisible/static/css/main.53b49ba0.chunk.css",
+    "main.js": "/amigo-invisible/static/js/main.248ce9d8.chunk.js",
+    "main.js.map": "/amigo-invisible/static/js/main.248ce9d8.chunk.js.map",
+    "runtime-main.js": "/amigo-invisible/static/js/runtime-main.c35954cb.js",
+    "runtime-main.js.map": "/amigo-invisible/static/js/runtime-main.c35954cb.js.map",
+    "static/js/2.7843c46c.chunk.js": "/amigo-invisible/static/js/2.7843c46c.chunk.js",
+    "static/js/2.7843c46c.chunk.js.map": "/amigo-invisible/static/js/2.7843c46c.chunk.js.map",
+    "static/js/3.d6e22c98.chunk.js": "/amigo-invisible/static/js/3.d6e22c98.chunk.js",
+    "static/js/3.d6e22c98.chunk.js.map": "/amigo-invisible/static/js/3.d6e22c98.chunk.js.map",
+    "index.html": "/amigo-invisible/index.html",
+    "static/css/main.53b49ba0.chunk.css.map": "/amigo-invisible/static/css/main.53b49ba0.chunk.css.map",
+    "static/js/2.7843c46c.chunk.js.LICENSE.txt": "/amigo-invisible/static/js/2.7843c46c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c35954cb.js",
+    "static/js/2.7843c46c.chunk.js",
+    "static/css/main.53b49ba0.chunk.css",
+    "static/js/main.248ce9d8.chunk.js"
+  ]
+}
