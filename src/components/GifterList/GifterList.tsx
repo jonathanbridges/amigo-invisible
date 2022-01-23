@@ -24,7 +24,7 @@ interface Props {
  */
 const GifterList: React.FC<Props> = ({ gifters, updateGifters, removeGifter }) => {
 	return (
-		<ListGroup as='ol' numbered>
+		<ListGroup as='ol' numbered className="mt-3 mt-md-0">
 			<TransitionGroup component={null}>
 				{gifters.map((currentGifter: Gifter) => {
 					const nodeRef = createRef<HTMLLIElement>();

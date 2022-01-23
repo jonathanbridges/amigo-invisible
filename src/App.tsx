@@ -1,30 +1,25 @@
-import React, { createRef, useRef, useState } from 'react';
-import { Button, Card, Col, Container, Form, ListGroup, Modal, Nav, Navbar, Row } from 'react-bootstrap';
+import React, { useRef, useState } from 'react';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import './styles/global.scss';
 import GifterList from './components/GifterList/GifterList';
 import { Gifter } from './components/GifterListItem/types';
-import logo from './logo.png';
 import drawNames from './helpers/utils';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import Particles from 'react-tsparticles';
-import { ArrowRight } from 'react-bootstrap-icons';
+import ParticlesComponent from './components/Particles/Particles';
+import FormComponent from './components/Form/Form';
+import NavbarComponent from './components/Navbar/Navbar';
+import logo from './logo.png';
+import ModalComponent from './components/Modal/Modal';
 
-interface GifterErrors {
+export interface GifterErrors {
 	alreadyExists?: boolean;
 	minLength?: boolean;
 }
 
-const mockOptions: Gifter[] = [
-	{ name: 'Jack', bannedReceivers: [] },
-	{ name: 'Jill', bannedReceivers: [] },
-	{ name: 'Over', bannedReceivers: [] },
-	{ name: 'Hill', bannedReceivers: [] },
-	{ name: 'Run', bannedReceivers: [] },
-	{ name: 'Forest', bannedReceivers: [] }
-];
-
+/**
+ * Renders the secret santa application
+ */
 const App: React.FC = () => {
-	const [gifters, setGifters] = useState<Gifter[]>(mockOptions);
+	const [gifters, setGifters] = useState<Gifter[]>([]);
 	const [gifterErrors, setGifterErrors] = useState<GifterErrors>({});
 	const [result, setResult] = useState<Map<string, string>>(new Map());
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -124,216 +119,46 @@ const App: React.FC = () => {
 		}
 	}
 
-	/**
-	 *
-	 * @returns Renders the running list of participants
-	 */
-	function renderRow() {
-		return (
-			<>
-				<Form.FloatingLabel controlId='name' label='Enter Name'>
-					<Form.Control ref={gifterRef} type='text' placeholder='Enter Name' />
-				</Form.FloatingLabel>
-				{gifterErrors.alreadyExists && <div className='text-danger mt-3'>Name already exists</div>}
-				{gifterErrors.minLength && <div className='text-danger mt-3'>Name must be at least 3 characters</div>}
-				<div className='d-flex justify-content-around mt-3'>
-					<Button className='me-auto' variant='secondary' type='submit'>
-						Add name
-					</Button>
-					<Button
-						variant='secondary'
-						disabled={isInvalidSetup()}
-						onClick={() => {
-							setShowModal(true);
-							drawNames(gifters, updateResult);
-						}}
-					>
-						Draw!
-					</Button>
-				</div>
-			</>
-		);
-	}
-
 	return (
-		<>
-			<Particles
-				id='tsparticles'
-				options={{
-					background: {
-						color: {
-							value: 'transparent'
-						},
-						position: '50% 50%',
-						repeat: 'no-repeat',
-						size: 'cover'
-					},
-					fullScreen: {
-						zIndex: 1
-					},
-					interactivity: {
-						events: {
-							onHover: {
-								enable: true,
-								mode: 'bubble'
-							}
-						},
-						modes: {
-							bubble: {
-								distance: 400,
-								duration: 0.3,
-								opacity: 1,
-								size: 4
-							},
-							grab: {
-								distance: 400,
-								links: {
-									opacity: 0.5
-								}
-							}
-						}
-					},
-					particles: {
-						links: {
-							color: {
-								value: '#ffffff'
-							},
-							distance: 500,
-							opacity: 0.4,
-							width: 2
-						},
-						move: {
-							attract: {
-								rotate: {
-									x: 600,
-									y: 1200
-								}
-							},
-							direction: 'bottom',
-							enable: true,
-							outModes: 'out'
-						},
-						number: {
-							density: {
-								enable: true
-							},
-							value: 400
-						},
-						opacity: {
-							random: true,
-							value: {
-								min: 0.1,
-								max: 0.5
-							},
-							animation: {
-								speed: 1,
-								minimumValue: 0.1
-							}
-						},
-						size: {
-							random: true,
-							value: {
-								min: 1,
-								max: 8
-							},
-							animation: {
-								speed: 40,
-								minimumValue: 0.1
-							}
-						}
-					}
+		<div className='App'>
+			<ParticlesComponent />
+			<NavbarComponent logo={logo} />
+			<Container className='bg-primary' as='main'>
+				<Row>
+					<Col md={4}>
+						<Card>
+							<Card.Body>
+								<FormComponent
+									gifterErrors={gifterErrors}
+									gifterRef={gifterRef}
+									onAddGifter={(event) => {
+										event.preventDefault();
+										addGifter();
+									}}
+									onDrawNames={(): void => {
+										setShowModal(true);
+										drawNames(gifters, updateResult);
+									}}
+									isDisabled={isInvalidSetup()}
+								/>
+							</Card.Body>
+						</Card>
+					</Col>
+					<Col>
+						<GifterList gifters={gifters} updateGifters={updateGifters} removeGifter={removeGifter} />
+					</Col>
+				</Row>
+			</Container>
+			<ModalComponent
+				show={showModal}
+				onHide={() => setShowModal(false)}
+				onReset={() => {
+					setShowModal(false);
+					updateGifters([]);
 				}}
+				result={result}
 			/>
-			<div className='App'>
-				<Navbar bg='primary'>
-					<Container>
-						<Navbar.Brand className='San-navbar-brand'>
-							<img alt='Logo' src={logo} width='45' height='45' className='me-1' />
-							Secret Santa
-						</Navbar.Brand>
-						<Nav>
-							<Navbar.Text className='text-light'>Created by</Navbar.Text>
-							<Nav.Link className='text-light' href='https://www.jonathanbridges.com'>
-								Jonathan Bridges
-							</Nav.Link>
-						</Nav>
-					</Container>
-				</Navbar>
-				<Container className='bg-primary' as='main'>
-					<Row>
-						<Col md={4}>
-							<Card>
-								<Card.Body>
-									<Form
-										className='d-flex flex-column'
-										onSubmit={(event) => {
-											event.preventDefault();
-											addGifter();
-										}}
-									>
-										{renderRow()}
-									</Form>
-								</Card.Body>
-							</Card>
-						</Col>
-						<Col>
-							<GifterList gifters={gifters} updateGifters={updateGifters} removeGifter={removeGifter} />
-						</Col>
-					</Row>
-				</Container>
-				<Modal centered show={showModal} onHide={() => setShowModal(false)}>
-					<Modal.Header className='mx-3' closeButton>
-						<Modal.Title>Go get giftin'</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<ListGroup variant={'flush'} as='ul'>
-							<TransitionGroup component={null}>
-								{Array.from(result).map(([gifter, recipient]: [gifter: string, recipient: string]) => {
-									const nodeRef = createRef<HTMLLIElement>();
-									return (
-										<CSSTransition
-											classNames='Fade'
-											key={gifter}
-											timeout={{
-												appear: 500,
-												enter: 500,
-												exit: 500
-											}}
-											nodeRef={nodeRef}
-										>
-											<ListGroup.Item
-												className='d-flex align-items-center justify-content-evenly'
-												as='li'
-												ref={nodeRef}
-												key={gifter}
-											>
-												<span className='fw-bolder w-50'>{gifter}</span>
-												<ArrowRight className='w-100 position-absolute' />
-												<span className='fw-bolder ms-auto'>{recipient}</span>
-											</ListGroup.Item>
-										</CSSTransition>
-									);
-								})}
-							</TransitionGroup>
-						</ListGroup>
-					</Modal.Body>
-					<Modal.Footer className='mx-3'>
-						<Button
-							variant='secondary'
-							onClick={() => {
-								setShowModal(false);
-								updateGifters([]);
-							}}
-						>
-							Reset
-						</Button>
-						<Button variant='secondary' onClick={() => window.print()}>
-							Print
-						</Button>
-					</Modal.Footer>
-				</Modal>
-			</div>
-		</>
+		</div>
 	);
 };
 
